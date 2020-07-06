@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>YFinance API</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
+
+      body{
+        display: flex;
+        align-content: center;
+        background-color: #E6E2DE;
+        min-height: 100vh;
+        margin: 0;
+      }
+      
+      #content{
+        text-align: center;
+        margin: auto;
+        padding: 0 10%;
+
+        opacity: 0;
+      }
+
+      h1, h5, a{
+        font-family: Roboto;
+        font-weight: 500;
+        color: #424E4B;
+      }
+      
+      h5{
+        font-weight: 300;
+      }
+    </style>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.4/gsap.min.js'></script>
+  </head>
+  
+  <body>
+    <div id="content">
+      <h1>This is the Yahoo Finance API!</h1>
+      <h5>Based on yFinance</h5>
+      <a href='https://github.com/williamsiuhang/stonks-api'>
+        <h5>https://github.com/williamsiuhang/stonks-api</h5>
+      </a>
+    </div>
+  </body>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      gsap.to('#content', { opacity: 1 });
+    });
+  </script>
+</html>
