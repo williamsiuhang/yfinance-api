@@ -32,7 +32,11 @@ def info():
     symbol = request.args.get('symbol')
 
     if symbol is not None:
-        return success(yf.Ticker(symbol).info)
+        try:
+            info = yf.Ticker(symbol).info
+            return success(info)
+        except:
+            return error('Could not get information for ' + symbol)
     else:
         return error('Symbol not specified')
 
@@ -44,7 +48,11 @@ def options():
     symbol = request.args.get('symbol')
 
     if symbol is not None:
-        return success(list(yf.Ticker(symbol).options))
+        try:
+            options = list(yf.Ticker(symbol).options)
+            return success(options) if len(options) > 0 else error('No options found for symbol ' + symbol)
+        except:
+            return error('Could not get options information for ' + symbol)
     else:
         return error('Symbol not specified')
 
@@ -56,28 +64,28 @@ def optionchain():
     symbol = request.args.get('symbol')
     date = request.args.get('date')
 
+    # pandas dataframe into key / value array
     def normalize_options(option, headers):
         normalized = {}
-
         for i, category in enumerate(option):
             normalized[headers[i]] = category
-
         return normalized
 
     if symbol and date:
-        panda_df = yf.Ticker(symbol).option_chain(date)
+        try:
+            panda_df = yf.Ticker(symbol).option_chain(date)
 
-        headers = list(panda_df[0])
+            headers = list(panda_df[0])
 
-        calls = panda_df[0].values.tolist()
-        puts = panda_df[1].values.tolist()
+            calls = panda_df[0].values.tolist()
+            puts = panda_df[1].values.tolist()
 
-        normalized_calls = [normalize_options(
-            option, headers) for option in calls]
-        normalized_puts = [normalize_options(
-            option, headers) for option in puts]
+            normalized_calls = [normalize_options(option, headers) for option in calls]
+            normalized_puts = [normalize_options(option, headers) for option in puts]
 
-        return success({'calls': normalized_calls, 'puts': normalized_puts})
+            return success({'calls': normalized_calls, 'puts': normalized_puts})
+        except:
+            return error('Could not get option chain for ' + symbol + ' with date ' + date)
     else:
         return error('Symbol or date not specified')
 
