@@ -4,7 +4,7 @@ import yfinance as yf
 
 
 app = flask.Flask(__name__)
-# app.config["DEBUG"] = True
+app.config["DEBUG"] = True
 
 
 # response status
@@ -25,8 +25,6 @@ def home():
     return render_template('index.html')
 
 # stock summary
-
-
 @app.route('/info', methods=['GET'])
 def info():
     symbol = request.args.get('symbol')
@@ -40,9 +38,24 @@ def info():
     else:
         return error('Symbol not specified')
 
+
+# stock summary
+@app.route('/history', methods=['GET'])
+def history():
+    symbol = request.args.get('symbol')
+    # period = request.args.get('period')
+
+    if symbol is not None:
+        try:
+            info = yf.Ticker(symbol).ticker.history(period="max")
+            print(info)
+            return success(symbol)
+        except:
+            return error('Could not get history for ' + symbol)
+    else:
+        return error('Symbol not specified')
+
 # option dates
-
-
 @app.route('/options', methods=['GET'])
 def options():
     symbol = request.args.get('symbol')
@@ -57,8 +70,6 @@ def options():
         return error('Symbol not specified')
 
 # option chain
-
-
 @app.route('/optionchain', methods=['GET'])
 def optionchain():
     symbol = request.args.get('symbol')
