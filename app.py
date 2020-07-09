@@ -1,5 +1,5 @@
 import flask
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 import yfinance as yf
 
 
@@ -10,13 +10,14 @@ app = flask.Flask(__name__)
 # response status
 def success(data):
     res = {}
-    res['status'] = 200
-    res['data'] = data
-    return res
+    return jsonify({
+      'status': 200,
+      'data': data
+    })
 
 
 def error(message):
-    return {'status': 300} if message is None else {'status': 300, 'message': message}
+    return jsonify({'status': 300}) if message is None else jsonify({'status': 300, 'message': message})
 
 
 # routes
