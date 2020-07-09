@@ -11,13 +11,13 @@ app = flask.Flask(__name__)
 def success(data):
     res = {}
     return jsonify({
-      'status': 200,
-      'data': data
+      "status": 200,
+      "data": data
     })
 
 
 def error(message):
-    return jsonify({'status': 300}) if message is None else jsonify({'status': 300, 'message': message})
+    return jsonify({"status": 300}) if message is None else jsonify({"status": 300, "message": message})
 
 
 # routes
