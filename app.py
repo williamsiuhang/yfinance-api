@@ -12,8 +12,8 @@ app = flask.Flask(__name__)
 def success(data):
     res = {}
     return jsonify({
-      "status": 200,
-      "data": data
+        "status": 200,
+        "data": data
     })
 
 
@@ -27,6 +27,8 @@ def home():
     return render_template('index.html')
 
 # stock summary
+
+
 @app.route('/info', methods=['GET'])
 def info():
     symbol = request.args.get('symbol')
@@ -58,6 +60,8 @@ def history():
         return error('Symbol not specified')
 
 # option dates
+
+
 @app.route('/options', methods=['GET'])
 def options():
     symbol = request.args.get('symbol')
@@ -72,6 +76,8 @@ def options():
         return error('Symbol not specified')
 
 # option chain
+
+
 @app.route('/optionchain', methods=['GET'])
 def optionchain():
     symbol = request.args.get('symbol')
@@ -84,9 +90,14 @@ def optionchain():
             normalized[headers[i]] = categoryVal
 
             # Default to 0 if NaN
-            if(headers[i] in ['ask','bid','change','impliedVolatility','lastPrice','openInterest','percentChange','strike','volume']):
-              if(math.isnan(categoryVal)):
-                normalized[headers[i]] = 0 
+            if(headers[i] in ['ask', 'bid', 'change', 'impliedVolatility', 'lastPrice', 'openInterest', 'percentChange', 'strike', 'volume']):
+                if(math.isnan(categoryVal)):
+                    normalized[headers[i]] = 0
+
+            # BUG fix: currency is NaN sometimes, when it should be a string | just ignore it for now
+            # Need to look into yfinance fork for better NaN handling
+            if(headers[i] == 'currency'):
+              normalized[headers[i]] = 0
 
         return normalized
 
@@ -99,8 +110,10 @@ def optionchain():
             calls = panda_df[0].values.tolist()
             puts = panda_df[1].values.tolist()
 
-            normalized_calls = [normalize_options(option, headers) for option in calls]
-            normalized_puts = [normalize_options(option, headers) for option in puts]
+            normalized_calls = [normalize_options(
+                option, headers) for option in calls]
+            normalized_puts = [normalize_options(
+                option, headers) for option in puts]
 
             return success({'calls': normalized_calls, 'puts': normalized_puts})
         except:
