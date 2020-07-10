@@ -1,5 +1,6 @@
 import flask
 from flask import Flask, request, render_template, jsonify
+import math
 import yfinance as yf
 
 
@@ -79,8 +80,13 @@ def optionchain():
     # pandas dataframe into key / value array
     def normalize_options(option, headers):
         normalized = {}
-        for i, category in enumerate(option):
-            normalized[headers[i]] = category
+        for i, categoryVal in enumerate(option):
+            normalized[headers[i]] = categoryVal
+
+            # Default to 0 if NaN
+            if(headers[i] == 'volume' and math.isnan(categoryVal)):
+              normalized[headers[i]] = 0 
+
         return normalized
 
     if symbol and date:
