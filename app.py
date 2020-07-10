@@ -84,8 +84,9 @@ def optionchain():
             normalized[headers[i]] = categoryVal
 
             # Default to 0 if NaN
-            if(headers[i] == 'volume' and math.isnan(categoryVal)):
-              normalized[headers[i]] = 0 
+            if(headers[i] in ['ask','bid','change','impliedVolatility','lastPrice','openInterest','percentChange','strike','volume']):
+              if(math.isnan(categoryVal)):
+                normalized[headers[i]] = 0 
 
         return normalized
 
