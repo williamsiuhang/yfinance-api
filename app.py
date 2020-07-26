@@ -3,6 +3,7 @@ from flask import Flask, request, render_template, jsonify
 import math
 import yfinance as yf
 
+print('Running economists')
 
 app = flask.Flask(__name__)
 # app.config["DEBUG"] = True
@@ -122,7 +123,7 @@ def optionchain():
         return error('Symbol or date not specified')
 
 
-if __name__ == "main":
-    app.run()
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')
 
     # nodemon --exec flask run
