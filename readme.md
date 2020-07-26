@@ -7,7 +7,7 @@ Running on Python / Flask
 
 #### Routes
 
-https://economists.herokuapp.com
+https://economists.live
 
 Basic stock summary
 
